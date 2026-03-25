@@ -10,7 +10,7 @@
 
 ## 🌐 Live Preview
 
-**Live Demo: [https://liouyutong.github.io/0325\_HW1/](https://liouyutong.github.io/0325_HW1/)**
+**Live Demo: [https://0325hw1-asdzfsjlaxuvvxncxyj6bm.streamlit.app/](https://0325hw1-asdzfsjlaxuvvxncxyj6bm.streamlit.app/)**
 
 ![Dashboard Screenshot](screenshot.png)
 

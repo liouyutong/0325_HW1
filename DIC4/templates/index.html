@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENSE Dashboard</title>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent-color: #38bdf8;
+            --text-color: #f1f5f9;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        header {
+            text-align: left;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, hover 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 300;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card .value {
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .card .unit {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #94a3b8;
+        }
+
+        .table-card {
+            flex-grow: 1;
+            padding: 1.5rem;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .table-card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 1rem;
+            color: #94a3b8;
+            font-weight: 400;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.875rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .live-status {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            header h1 { font-size: 2rem; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Sensor Dashboard</h1>
+            <p>Real-time data stream from SQLite</p>
+        </header>
+
+        <div class="kpi-container">
+            <!-- Humidity Card -->
+            <div class="card">
+                <div class="live-status"><span class="dot"></span> LIVE</div>
+                <h3>Humidity</h3>
+                <div class="value" id="current-humidity">--</div>
+                <span class="unit">%</span>
+            </div>
+
+            <!-- Temperature Card -->
+            <div class="card">
+                <div class="live-status"><span class="dot"></span> LIVE</div>
+                <h3>Temperature</h3>
+                <div class="value" id="current-temperature">--</div>
+                <span class="unit">°C</span>
+            </div>
+
+            <!-- Last Update Card -->
+            <div class="card">
+                <h3>Last Update</h3>
+                <div class="value" id="last-time" style="font-size: 1.25rem;">--:--:--</div>
+                <p id="last-date" style="font-size: 0.75rem; color: #94a3b8;"></p>
+            </div>
+        </div>
+
+        <div class="card table-card">
+            <h2>Recent Readings</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Time</th>
+                        <th>Humidity (%)</th>
+                        <th>Temperature (°C)</th>
+                    </tr>
+                </thead>
+                <tbody id="history-table">
+                    <!-- Rows will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function updateDashboard() {
+            try {
+                const response = await fetch('/api/data');
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    const latest = data[0];
+                    
+                    // Update KPI cards
+                    document.getElementById('current-humidity').innerText = latest.humid;
+                    document.getElementById('current-temperature').innerText = latest.temp;
+                    
+                    // Format and update time
+                    const timeObj = new Date(latest.time);
+                    document.getElementById('last-time').innerText = timeObj.toLocaleTimeString();
+                    document.getElementById('last-date').innerText = timeObj.toLocaleDateString();
+
+                    // Update Table
+                    const tableBody = document.getElementById('history-table');
+                    tableBody.innerHTML = '';
+                    
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>#${row.id}</td>
+                            <td>${new Date(row.time).toLocaleTimeString()}</td>
+                            <td style="color: #38bdf8; font-weight: 600;">${row.humid}%</td>
+                            <td style="color: #fca5a5; font-weight: 600;">${row.temp}°C</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Fetch data immediately on load
+        updateDashboard();
+
+        // Refresh every 3 seconds
+        setInterval(updateDashboard, 3000);
+    </script>
+</body>
+</html>

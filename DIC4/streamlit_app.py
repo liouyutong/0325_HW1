@@ -128,8 +128,41 @@ st.markdown("""
 # --- DATABASE FETCH ---
 DB_FILE = 'aiotdb.db'
 
+def init_db_if_missing():
+    """Initializes the SQLite database and table if they don't exist."""
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    # Create table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS sensors (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            humid REAL NOT NULL,
+            temp REAL NOT NULL,
+            time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    
+    # Check if empty (important for first-time cloud deployment)
+    cursor.execute("SELECT COUNT(*) FROM sensors")
+    count = cursor.fetchone()[0]
+    
+    if count == 0:
+        import random
+        from datetime import datetime, timedelta
+        # Insert 40 dummy records for the chart to look good
+        now = datetime.now()
+        for i in range(40):
+            record_time = (now - timedelta(minutes=(40-i))).strftime('%Y-%m-%d %H:%M:%S')
+            h = round(random.uniform(40.0, 70.0), 2)
+            t = round(random.uniform(22.0, 28.0), 2)
+            cursor.execute("INSERT INTO sensors (humid, temp, time) VALUES (?, ?, ?)", (h, t, record_time))
+            
+    conn.commit()
+    conn.close()
+
 def get_data(limit=50):
     """Fetches the latest readings from the database."""
+    init_db_if_missing() # Ensure table exists at runtime
     try:
         conn = sqlite3.connect(DB_FILE)
         query = f"SELECT * FROM sensors ORDER BY id DESC LIMIT {limit}"

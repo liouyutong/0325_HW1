@@ -160,9 +160,23 @@ def init_db_if_missing():
     conn.commit()
     conn.close()
 
+def add_realtime_point():
+    """Inserts a single random sensor record for the live demo."""
+    import random
+    from datetime import datetime
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    record_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    h = round(random.uniform(30.0, 90.0), 2)
+    t = round(random.uniform(15.0, 35.0), 2)
+    cursor.execute("INSERT INTO sensors (humid, temp, time) VALUES (?, ?, ?)", (h, t, record_time))
+    conn.commit()
+    conn.close()
+
 def get_data(limit=50):
     """Fetches the latest readings from the database."""
     init_db_if_missing() # Ensure table exists at runtime
+    add_realtime_point() # Simulate real-time data update
     try:
         conn = sqlite3.connect(DB_FILE)
         query = f"SELECT * FROM sensors ORDER BY id DESC LIMIT {limit}"

@@ -8,6 +8,12 @@
 *   **即時監控**：自動每 2 秒更新一次數據，並提供完整的歷史趨勢圖表。
 *   **數據持久化**：使用輕量級 SQLite 資料庫存儲所有歷史感測紀錄。
 
+## 🌐 Live Preview
+
+**Live Demo: [https://liouyutong.github.io/0325\_HW1/](https://liouyutong.github.io/0325_HW1/)**
+
+![Dashboard Screenshot](screenshot.png)
+
 ## 📂 資料夾結構說明
 *   `HW1.ino`: 實體 ESP32 硬體讀取 DHT11 數據並上傳的原始碼。
 *   `DIC4/`: 系統核心資料夾
